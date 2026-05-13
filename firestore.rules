@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() { 
+      return request.auth != null; 
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Explicitly allow connection test
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
+    }
+
+    // Projects Collection
+    match /projects/{projectId} {
+      // Basic validation
+      function isValidProject(data) {
+        return data.name is string && data.name.size() > 0 && 
+               data.ownerId is string && data.ownerId.size() > 0;
+      }
+
+      // Read: List if ownerId matches, Get if owner or member
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow get: if isSignedIn() && (resource.data.ownerId == request.auth.uid || (resource.data.members is list && request.auth.uid in resource.data.members));
+      
+      allow create: if isSignedIn() && request.resource.data.ownerId == request.auth.uid && isValidProject(request.resource.data);
+      allow update: if isSignedIn() && resource.data.ownerId == request.auth.uid && isValidProject(request.resource.data);
+      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Tasks Collection
+    match /tasks/{taskId} {
+      // Read: List if ownerId matches (requires client to filter by ownerId)
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      
+      allow create: if isSignedIn() && request.resource.data.ownerId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Activity Logs
+    match /activity_logs/{logId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+  }
+}
