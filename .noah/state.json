@@ -2,18 +2,18 @@
   "generatedBy": "Noah-AI",
   "schema": 1,
   "lastDeployment": {
-    "deploymentId": "dpl_64ygdSLn2cfwM8a5nUwk3hhBW2xh",
+    "deploymentId": "dpl_27iZg15xqtVLxfX6kUzb6V8ZE7gq",
     "platform": "vercel",
-    "commit": "e7ba078e9f564fd8a368a0727b29983ba9aeca5d",
+    "commit": "71da6e7424794af0d38354fd15558dd51f0496ad",
     "url": "https://task-flow-rho-fawn.vercel.app",
     "status": "success",
-    "deployedAt": "2026-06-12T17:04:02.931Z"
+    "deployedAt": "2026-06-13T09:35:53.643Z"
   },
   "lastSuccessfulDeployment": {
-    "deploymentId": "dpl_64ygdSLn2cfwM8a5nUwk3hhBW2xh",
+    "deploymentId": "dpl_27iZg15xqtVLxfX6kUzb6V8ZE7gq",
     "platform": "vercel",
-    "commit": "e7ba078e9f564fd8a368a0727b29983ba9aeca5d",
+    "commit": "71da6e7424794af0d38354fd15558dd51f0496ad",
     "url": "https://task-flow-rho-fawn.vercel.app",
-    "deployedAt": "2026-06-12T17:04:02.931Z"
+    "deployedAt": "2026-06-13T09:35:53.643Z"
   }
 }
